@@ -12,12 +12,18 @@ const getEmployeeById = async (req, res) => {
 };
 
 const createEmployee = async (req, res) => {
+    const { username } = req.body;
+
+    const employee = await Employee.findOne({ where: { username } });
+    if (!employee) {
+        return res.status(201).json({ message: "username already exist" });
+    }
     try {
         const employee = await Employee.create(req.body);
-        res.json(employee);
+        res.status(201).json(employee);
     } catch (error) {
         console.log(error);
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
