@@ -1,4 +1,5 @@
 const { Attendance, Employee, User } = require("../models");
+const { validateUsername } = require("../validation/validation"); // Assuming validation.js is in the same directory
 
 const getUser = async (req, res) => {
     try {
@@ -12,6 +13,12 @@ const getUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     const username = req.params.username;
+    const validationResult = validateUsername(req.params.username);
+    if (validationResult.error) {
+        return res
+            .status(400)
+            .send({ message: validationResult.error.message });
+    }
     console.log(username);
     try {
         const status = await User.destroy({ where: { username: username } });
