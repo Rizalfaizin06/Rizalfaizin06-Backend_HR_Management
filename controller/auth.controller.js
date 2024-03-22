@@ -1,6 +1,7 @@
 const { hashPassword, comparePassword } = require("../utils/bcrypt");
 const { Attendance, Employee, User } = require("../models");
 const { generateToken } = require("../utils/jwt");
+const { validateSignUp } = require("../validation/signUp.validation");
 
 const signIn = async (req, res) => {
     const { username, password } = req.body;
@@ -25,8 +26,17 @@ const signIn = async (req, res) => {
 
 const signUp = async (req, res) => {
     const { username, password } = req.body;
+    const validationResult = validateSignUp({
+        username,
+        password,
+    });
 
-    // Check for existing email
+    if (validationResult.error) {
+        return res
+            .status(400)
+            .send({ message: validationResult.error.message });
+    }
+
     const existingUser = await User.findOne({ where: { username } });
     if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
