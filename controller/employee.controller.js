@@ -1,4 +1,6 @@
 const { Attendance, Employee, User } = require("../models");
+// const { query, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 
 // MULAI EMPLOYEE ROUTE
 const getEmployee = async (req, res) => {
@@ -11,13 +13,29 @@ const getEmployeeById = async (req, res) => {
     res.json(employee);
 };
 
+// const createEmployee = async (req, res) => {
+//     try {
+//         const employee = await Employee.create(req.body);
+//         res.json(employee);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(400).json({ error: error.message });
+//     }
+// };
+
 const createEmployee = async (req, res) => {
+    // const { error } = req.validationErrors(); // Access validation errors
+    // console.log(req.validationErrors());
+    // if (error) {
+    //     // Handle validation errors
+    //     return res.status(400).json({ errors: error.array() });
+    // }
     try {
         const employee = await Employee.create(req.body);
         res.json(employee);
     } catch (error) {
-        console.log(error);
-        res.status(400).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 

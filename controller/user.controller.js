@@ -1,4 +1,5 @@
 const { Attendance, Employee, User } = require("../models");
+const { validationResult, validationAdd } = require("express-validator");
 
 const getUser = async (req, res) => {
     try {
@@ -11,6 +12,19 @@ const getUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
+    // const validationRules = [
+    //     check("username")
+    //         .notEmpty()
+    //         .withMessage("Username is required")
+    //         .isLength({ min: 3 })
+    //         .withMessage("Username must be at least 3 characters long"),
+    // ];
+
+    // const validationErrors = validationResult(req);
+    // if (!validationErrors.isEmpty()) {
+    //     return res.status(400).json({ errors: validationErrors.array() });
+    // }
+
     const username = req.params.username;
     console.log(username);
     try {
