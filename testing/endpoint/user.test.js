@@ -3,7 +3,7 @@ const server = require("../../app");
 const app = require("../../app");
 const { Attendance, Employee, User } = require("../../models");
 
-describe("Test User Management", () => {
+describe("Test Get User /users", () => {
     // beforeAll(async () => {
     //     // await User.create({
     //     //     userId: null,
@@ -47,14 +47,12 @@ describe("Test User Management", () => {
         [1, 1],
         // [50, 50],
     ])(
-        "{GET /users} should retrieve %i users (create %i users first)",
+        "should retrieve %i users (create %i users first)",
         async (expectedUsers, numUsersToCreate) => {
             for (let i = 0; i < numUsersToCreate; i++) {
                 await User.create({
                     username: `user${i + 1}`,
                     password: "testpassword",
-                    createdAt: "2024-03-14T09:07:29.202Z",
-                    updatedAt: "2024-03-14T09:07:29.202Z",
                 });
             }
 
@@ -65,7 +63,7 @@ describe("Test User Management", () => {
         }
     );
 
-    test("{GET /users DB ERROR CHECK} should retrieve 500 internal error", async () => {
+    test("{DB ERROR CHECK} should retrieve 500 internal error", async () => {
         jest.spyOn(User, "findAll").mockRejectedValue(
             new Error("Database error")
         );
@@ -75,21 +73,29 @@ describe("Test User Management", () => {
         expect(response.body).toEqual({ error: "Database error" });
         jest.restoreAllMocks();
     });
+});
 
+describe("Test Delete User /users/:username", () => {
+    afterEach(async () => {
+        jest.clearAllMocks();
+        await User.destroy({ truncate: true, cascade: true });
+
+        if (server && server.close) {
+            await new Promise((resolve) => server.close(resolve));
+        }
+    });
     test.each([
         [0, 0],
         [11, 11],
         // [25, 25],
         // [50, 50],
     ])(
-        "{Delete /users/:username} should delete %i users (create %i users first) then delete %i users",
+        "should delete %i users (create %i users first) then delete %i users",
         async (numUsersToCreate) => {
             for (let i = 0; i < numUsersToCreate; i++) {
                 await User.create({
                     username: `user${i}`,
                     password: "testpassword",
-                    createdAt: "2024-03-14T09:07:29.202Z",
-                    updatedAt: "2024-03-14T09:07:29.202Z",
                 });
             }
 
@@ -101,7 +107,7 @@ describe("Test User Management", () => {
         }
     );
 
-    test("{Delete /users/:username} should retrieve 404 not found", async () => {
+    test("should retrieve 404 not found", async () => {
         const response = await supertest(app).delete(`/users/rizalllllllllll`);
         expect(response.status).toBe(404);
         expect(response.body).toEqual({
@@ -109,7 +115,7 @@ describe("Test User Management", () => {
         });
     });
 
-    test("{Delete /users/:username} should retrieve 400 validation error", async () => {
+    test("should retrieve 400 validation error", async () => {
         await User.create({
             username: "rzl",
             password: "testpassword",
@@ -125,7 +131,7 @@ describe("Test User Management", () => {
         });
     });
 
-    test("{DELETE /users DB ERROR CHECK} should retrieve 500 internal error", async () => {
+    test("{DB ERROR CHECK} should retrieve 500 internal error", async () => {
         await User.create({
             username: `rizal`,
             password: "testpassword",

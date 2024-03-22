@@ -1,6 +1,5 @@
-const dotenv = require("dotenv"); // Import the dotenv package
+const dotenv = require("dotenv");
 
-// Load environment variables from a dedicated `.env` file (outside version control)
 dotenv.config({ path: ".env" });
 
 module.exports = {
@@ -12,14 +11,14 @@ module.exports = {
         dialect: "postgres",
     },
     test: {
-        username: process.env.DB_USERNAME_TEST, // Use separate variables for test environment
+        username: process.env.DB_USERNAME_TEST,
         password: process.env.DB_PASSWORD_TEST,
         database: process.env.DB_DATABASE_TEST,
         host: process.env.DB_HOST_TEST,
         dialect: "postgres",
     },
     production: {
-        username: process.env.DB_USERNAME_PROD, // Use separate variables for production environment
+        username: process.env.DB_USERNAME_PROD,
         password: process.env.DB_PASSWORD_PROD,
         database: process.env.DB_DATABASE_PROD,
         host: process.env.DB_HOST_PROD,

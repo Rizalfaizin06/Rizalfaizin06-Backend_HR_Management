@@ -1,8 +1,6 @@
 const { Attendance, Employee, User } = require("../models");
 const { verifyToken } = require("../utils/jwt");
 
-//MULAI ATTENDANCE ROUTE
-
 const getAttendance = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
@@ -12,7 +10,6 @@ const getAttendance = async (req, res, next) => {
             .json({ message: "Unauthorized: Access token missing" });
     }
 
-    // Extract the token from the Authorization header:
     const token = authHeader.split(" ")[1];
 
     try {
@@ -23,10 +20,8 @@ const getAttendance = async (req, res, next) => {
                 .json({ message: "Unauthorized: Invalid token" });
         }
 
-        // **Attach the decoded user information to the request object for further use:**
         req.user = decoded;
 
-        // Proceed with the protected route logic:
         try {
             const attendance = await Attendance.findAll({
                 include: [{ model: Employee }],
@@ -41,7 +36,7 @@ const getAttendance = async (req, res, next) => {
         console.error("Error verifying token:", error.message);
         res.status(500).json({
             message: error.message,
-        }); // Avoid leaking details
+        });
     }
 };
 
@@ -67,12 +62,12 @@ const getAttendancePagination = async (req, res) => {
 
     console.log(page, dataPerPage, offset);
     try {
-        const totalRows = await Attendance.count(); // Count total rows
-        const pages = Math.ceil(totalRows / dataPerPage); // Calculate total pages
+        const totalRows = await Attendance.count();
+        const pages = Math.ceil(totalRows / dataPerPage);
 
         const attendance = await Attendance.findAll({
-            limit: dataPerPage, // Limit the number of results
-            offset, // Skip results based on the current page
+            limit: dataPerPage,
+            offset,
             include: [
                 {
                     model: Employee,
@@ -88,7 +83,7 @@ const getAttendancePagination = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).send("Internal Server Error"); // Handle errors gracefully
+        res.status(500).send("Internal Server Error");
     }
 };
 

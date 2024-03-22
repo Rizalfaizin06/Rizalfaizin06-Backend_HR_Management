@@ -1,7 +1,7 @@
 const { hashPassword, comparePassword } = require("../utils/bcrypt");
 const { Attendance, Employee, User } = require("../models");
 const { generateToken } = require("../utils/jwt");
-const { validateUser } = require("../validation/auth.validation");
+const { validateUser } = require("../validation/user.validation");
 
 const signIn = async (req, res) => {
     const { username, password } = req.body;
