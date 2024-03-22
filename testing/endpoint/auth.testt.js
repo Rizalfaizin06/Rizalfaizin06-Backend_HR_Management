@@ -31,6 +31,8 @@ describe("Test Auth", () => {
     //             updatedAt: "2024-03-15T06:46:19.801Z",
     //         },
     //     ]);
+    // await User.destroy({ truncate: true, cascade: true });
+
     // });
     afterEach(async () => {
         await User.destroy({ truncate: true, cascade: true });
