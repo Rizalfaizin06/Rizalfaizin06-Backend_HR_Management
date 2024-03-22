@@ -2,9 +2,7 @@
     "scripts": {
         "dev": "nodemon app.js",
         "test": "npx jest --detectOpenHandles",
-        "cov": "npx jest --coverage",
-        "ftest": "npx jest --detectOpenHandles --coverage"
-
+        "coverage": "npx jest --detectOpenHandles --coverage"
     },
     "dependencies": {
         "bcrypt": "^5.1.1",

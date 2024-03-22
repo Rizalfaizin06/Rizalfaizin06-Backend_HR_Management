@@ -13,11 +13,11 @@ const getUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     const username = req.params.username;
-    console.log(username);
     const validationResult = validateDeleteUser(username);
-
     if (validationResult.error) {
-        return res.status(400).json({ error: validationResult.error.message });
+        return res
+            .status(400)
+            .json({ message: validationResult.error.message });
     }
 
     try {

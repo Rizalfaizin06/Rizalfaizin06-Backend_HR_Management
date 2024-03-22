@@ -20,5 +20,5 @@ const userSchema = Joi.object({
 });
 
 module.exports = {
-    validateSignUp: (data) => userSchema.validate(data),
+    validateUser: (data) => userSchema.validate(data),
 };

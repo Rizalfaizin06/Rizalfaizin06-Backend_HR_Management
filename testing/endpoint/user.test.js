@@ -4,7 +4,35 @@ const app = require("../../app");
 const { Attendance, Employee, User } = require("../../models");
 
 describe("Test User Management", () => {
-    beforeAll(async () => {});
+    // beforeAll(async () => {
+    //     // await User.create({
+    //     //     userId: null,
+    //     //     username: "user1Doang",
+    //     //     password:
+    //     //         "$2b$10$L0PlOhsKD/t3sFlwPFwlXeWJ6JkOhsB8Y8vkql3DuJUPSgeRbvnYi",
+    //     //     createdAt: "2024-03-14T09:07:29.202Z",
+    //     //     updatedAt: "2024-03-14T09:07:29.202Z",
+    //     // });
+    //     await User.bulkCreate([
+    //         {
+    //             userId: 1,
+    //             username: "user1",
+    //             password:
+    //                 "$2b$10$L0PlOhsKD/t3sFlwPFwlXeWJ6JkOhsB8Y8vkql3DuJUPSgeRbvnYi",
+    //             createdAt: "2024-03-14T09:07:29.202Z",
+    //             updatedAt: "2024-03-14T09:07:29.202Z",
+    //         },
+    //         {
+    //             userId: 2,
+    //             username: "user2",
+    //             password:
+    //                 "$2b$10$L0PlOhsKD/t3sFlwPFwlXeWJ6JkOhsB8Y8vkql3DuJUPSgeRbvnYi",
+    //             createdAt: "2024-03-15T06:46:19.801Z",
+    //             updatedAt: "2024-03-15T06:46:19.801Z",
+    //         },
+    //     ]);
+    // await User.destroy({ truncate: true, cascade: true });
+    // });
     afterEach(async () => {
         jest.clearAllMocks();
         await User.destroy({ truncate: true, cascade: true });
@@ -50,7 +78,7 @@ describe("Test User Management", () => {
 
     test.each([
         [0, 0],
-        [1, 1],
+        [11, 11],
         // [25, 25],
         // [50, 50],
     ])(
@@ -83,16 +111,17 @@ describe("Test User Management", () => {
 
     test("{Delete /users/:username} should retrieve 400 validation error", async () => {
         await User.create({
-            username: `rzl`,
+            username: "rzl",
             password: "testpassword",
             createdAt: "2024-03-14T09:07:29.202Z",
             updatedAt: "2024-03-14T09:07:29.202Z",
         });
 
-        const response = await supertest(app).delete(`/users/rzl`);
+        const response = await supertest(app).delete("/users/rzl");
         expect(response.status).toBe(400);
         expect(response.body).toEqual({
-            error: "Username atleast 4 and not contain space",
+            message:
+                "Username must be at least 4 characters long and should not contain spaces.",
         });
     });
 
