@@ -4,18 +4,19 @@ const userSchema = Joi.object({
     username: Joi.string()
         .required()
         .trim()
-        .min(3)
+        .min(4)
         .max(20)
-        .alphanum()
+        .regex(/^[^\s]+$/)
         .error(
             new Error(
-                "Username must be a valid alphanumeric string (3-20 characters)"
+                "Username must be at least 4 characters long and should not contain spaces."
             )
         ),
+
     password: Joi.string()
         .required()
         .min(6)
-        .error(new Error("Password must be at least 6 characters long")),
+        .error(new Error("Password must be at least 6 characters long.")),
 });
 
 module.exports = {

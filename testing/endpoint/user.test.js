@@ -22,7 +22,7 @@ describe("Test User Management", () => {
             for (let i = 0; i < numUsersToCreate; i++) {
                 await User.create({
                     username: `user${i + 1}`,
-                    password: "test pw",
+                    password: "testpassword",
                     createdAt: "2024-03-14T09:07:29.202Z",
                     updatedAt: "2024-03-14T09:07:29.202Z",
                 });
@@ -46,7 +46,7 @@ describe("Test User Management", () => {
             for (let i = 0; i < numUsersToCreate; i++) {
                 await User.create({
                     username: `user${i}`,
-                    password: "test pw",
+                    password: "testpassword",
                     createdAt: "2024-03-14T09:07:29.202Z",
                     updatedAt: "2024-03-14T09:07:29.202Z",
                 });
@@ -55,9 +55,40 @@ describe("Test User Management", () => {
             for (let i = 0; i < numUsersToCreate; i++) {
                 const response = await supertest(app).delete(`/users/user${i}`);
                 expect(response.status).toBe(200);
+                expect(response.body).toEqual({ message: "delete successful" });
             }
         }
     );
+
+    test("should retrieve 400 validation error", async () => {
+        await User.create({
+            username: `rzl`,
+            password: "testpassword",
+            createdAt: "2024-03-14T09:07:29.202Z",
+            updatedAt: "2024-03-14T09:07:29.202Z",
+        });
+
+        const response = await supertest(app).delete(`/users/rzl`);
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({
+            message: "Username atleast 4 and not contain space",
+        });
+    });
+
+    // test("should retrieve 400 validation error", async () => {
+    //     await User.create({
+    //         username: `rzl`,
+    //         password: "testpassword",
+    //         createdAt: "2024-03-14T09:07:29.202Z",
+    //         updatedAt: "2024-03-14T09:07:29.202Z",
+    //     });
+
+    //     const response = await supertest(app).delete(`/users/rzl`);
+    //     expect(response.status).toBe(400);
+    //     expect(response.body).toEqual({
+    //         message: "Username atleast 4 and not contain space",
+    //     });
+    // });
 
     // test("should retrieve 500 internal error", async () => {
     //     jest.spyOn(User, "findAll").mockRejectedValue(
